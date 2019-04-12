@@ -42,7 +42,7 @@ public class TaxiSource {
     private static Pipeline buildPipeline(JetInstance jet) {
         Pipeline p = Pipeline.create();
         long lagTime = 0L; //12 * 60 * 1000L;
-        IMap<Integer, TaxiData> sourceMap = jet.getMap(MAP_NAME);
+        IMap<String, TaxiData> sourceMap = jet.getMap(MAP_NAME);
         p.drawFrom(Sources.mapJournal(sourceMap, alwaysTrue(), Util.mapEventNewValue(), START_FROM_OLDEST))
             .withTimestamps(entry -> entry.getTimestamp().getTime(), lagTime)
             .groupingKey(TaxiData::getID)
@@ -72,6 +72,7 @@ public class TaxiSource {
     static final class Data {
         String taxiId;
         double speed;
+        double totalDistance;
         long time;
 
         @Override
@@ -79,6 +80,7 @@ public class TaxiSource {
             return "Data{" +
                     "taxiId='" + taxiId + '\'' +
                     ", speed=" + speed +
+                    ", totalDistance=" + totalDistance +
                     ", time=" + Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault()).toLocalDateTime() +
                     '}';
         }

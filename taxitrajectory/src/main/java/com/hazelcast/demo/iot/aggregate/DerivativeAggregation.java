@@ -22,6 +22,7 @@ public class DerivativeAggregation {
                         acc.lastItem = item;
                     }
                     acc.lastDifference = differenceFn.apply(item, acc.lastItem);
+//                    acc.totalDifference = (OUT) Double.valueOf((Double) acc.lastDifference + (Double) acc.lastDifference);
                     acc.lastItem = item;
                 })
                 .andExportFinish(acc -> acc.lastDifference);
@@ -30,5 +31,6 @@ public class DerivativeAggregation {
     private static final class DerivativeAccumulator<T, OUT> implements Serializable {
         T lastItem;
         OUT lastDifference;
+//        OUT totalDifference;
     }
 }
